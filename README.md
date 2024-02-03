@@ -1,2 +1,2 @@
-# PlaceHolderCEN
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+# Advisor Ally
+An AI advisor that makes custom semester plans to students of any major at uf.
