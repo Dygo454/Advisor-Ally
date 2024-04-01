@@ -1,0 +1,717 @@
+
+
+
+
+
+Computer Science | Herbert Wertheim College of Engineering < University of Florida
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to Content
+AZ Index
+Catalog Home
+UFL Home
+
+
+
+
+
+
+
+
+
+University of Florida
+
+
+
+
+Catalog
+
+
+Toggle navigation
+
+
+
+
+
+
+
+
+
+Search Catalog
+
+
+Submit
+
+
+
+
+
+
+
+Administration
+
+
+Programs
+
+
+
+
+Majors
+Minors
+Certificates
+
+
+
+
+UF Online Majors
+UF Online Minors
+Academic Programs
+
+
+
+
+
+
+Colleges & Schools
+
+
+Departments
+
+
+Courses
+
+
+
+
+Course Search
+A-Z
+
+
+
+
+
+
+Academic Advising
+
+
+Academic Regulations
+
+
+Admission
+
+
+
+
+
+Academic Catalogs
+Dates & Deadlines
+Student Life
+Previous Catalogs
+Print Options
+
+
+
+Search
+
+
+
+
+Search Catalog
+
+
+
+
+Registrar
+
+
+
+
+ 
+
+
+
+
+
+Computer Science | Herbert Wertheim College of Engineering
+major
+
+
+
+
+
+HomeUndergraduate CatalogColleges and SchoolsEngineering, Herbert Wertheim College ofComputer Science | Herbert Wertheim College of Engineering
+
+
+
+
+
+
+The Computer Science program combines a strong engineering-oriented technical basis with a flexible interdisciplinary component and an emphasis on communication skills. This flexibility is increasingly important as computers become more important tools in an ever-increasing number of disciplines. 
+
+
+
+
+Section Menu
+
+Undergraduate Catalog
+
+
+
+Advanced Engineering Ceramics Certificate
+Aerospace Engineering
+Artificial Intelligence Fundamentals and Applications Certificate
+Biological Engineering
+Biomaterials Certificate
+Biomechanics Minor
+Biomedical Engineering
+Biomolecular Engineering Minor
+Chemical Engineering
+Civil Engineering
+Computer and Information Science and Engineering Minor
+Computer and Information Science and Engineering Minor UF Online
+Computer Engineering
+Computer Science | Herbert Wertheim College of Engineering
+Digital Arts and Sciences | Bachelor of Science
+Electrical Engineering
+Electrical Engineering Minor
+Engineering Innovation Certificate
+Engineering Innovation Minor
+Engineering Leadership Certificate
+Engineering Project Management Certificate 
+Engineering | Exploring Engineering Studies
+Environmental Engineering
+Industrial and Systems Engineering
+Materials Science and Engineering
+Materials Science and Engineering Minor
+Mechanical Engineering
+Metallurgical Engineering Certificate
+Nuclear and Radiological Engineering Minor
+Nuclear Engineering
+Packaging Engineering Certificate
+Polymer Science and Engineering Certificate
+Sales Engineering Minor
+Semiconductor Materials Certificate
+Sustainable and Resilient Energy Engineering Certificate
+
+
+
+ 
+ 
+
+
+About this Program
+College: Herbert Wertheim College of Engineering
+Degree: Bachelor of Science in Computer Science
+Credits for Degree: 120
+More Info
+
+To graduate with this major, students must complete all university, college, and major requirements.
+Department Information
+The mission of the Department of Computer & Information Science & Engineering is to educate students, as well as the broader campus community, in the fundamental concepts of the computing discipline; to create and disseminate computing knowledge and technology; and to use expertise in computing to help society solve problems. Website CONTACT 352.392.1090 Email  P.O. Box 116120 E301 CSE BUILDING GAINESVILLE FL 32611-6120 Map  Curriculum   Combination Degrees Computer and Information Science and Engineering Minor Computer and Information Science and Engineering Minor UF Online Computer Science UF Online Computer Science | CLAS Computer Science | Herbert Wertheim College of Engineering Digital Arts and Sciences | Bachelor of Science 
+
+
+
+
+Overview
+
+Critical Tracking
+
+Model Semester Plan
+
+Academic Learning Compact
+
+
+
+Students in the engineering computer science (EG-CSE) program will satisfy the same requirements for General Education and obtain the same engineering preprofessional background in mathematics and science as other engineering students. The program contains a strong technical component comprising a set of required courses covering essential areas in computing and a set of technical electives enabling students to deepen their knowledge in chosen areas of computer science and engineering.
+In addition, the program includes a set of interdisciplinary electives in an area of the student's choice from anything the university offers. Students may choose an established minor, a predefined track or if nothing meets their needs, they can work with an advisor to develop their own program. Thus, students will not need to wait for an interdisciplinary program to be established; they can create their own.
+To answer the demands of industry for employees with both technical competence and the ability to communicate effectively, the program requires communication courses beyond the usual General Education requirements for engineering.
+Department Requirements
+Students must complete all critical-tracking courses with minimum grades of C in each course and the critical-tracking GPA must be 2.5 minimum. A minimum grade of C is required in all other courses that are prerequisites to a required course: CDA 3101, COP 3502C, COP 3503C, COP 3530, COP 4600, and COT 3100 . In addition, CISE requires all computer science students to maintain a cumulative, upper-division and department grade point average minimum of 2.0.
+Students who do not meet these requirements will be placed on academic probation and will be required to prepare a probation contract with a CISE advisor. Students are normally given two terms to remove their deficit points; however, students who do not satisfy the conditions of the first term of probation may be dismissed from the department.
+Students may opt to take COP 3504C in lieu of COP 3502C and COP 3503C. If elected, students will need to complete an additional 4 credits to complete the degree program.
+Required Courses
+
+Course List
+
+
+
+
+
+
+
+Code
+Title
+Credits
+
+
+
+Foundational
+ENC 3246Professional Communication for Engineers3
+MAC 2311Analytic Geometry and Calculus 14
+MAC 2312Analytic Geometry and Calculus 24
+MAC 2313Analytic Geometry and Calculus 34
+MAS 3114Computational Linear Algebra3
+PHY 2048& 2048LPhysics with Calculus 1and Laboratory for Physics with Calculus 14
+PHY 2049& 2049LPhysics with Calculus 2and Laboratory for Physics with Calculus 24
+STA 3032Engineering Statistics3
+Writing or public speaking course, as approved by department
+Computing Core 
+COP 3502CProgramming Fundamentals 14
+COP 3503CProgramming Fundamentals 24
+COP 3530Data Structures and Algorithm3
+COT 3100Applications of Discrete Structures3
+Major Core
+CDA 3101Introduction to Computer Organization3
+CEN 3031Introduction to Software Engineering3
+CIS 4301Information and Database Systems 13
+CIS 4914Senior Project3
+or EGN 4952 Integrated Product and Process Design 2
+CNT 4007Computer Network Fundamentals3
+COP 4020Programming Language Concepts3
+COP 4533Algorithm Abstraction and Design3
+COP 4600Operating Systems3
+EGS 4034Engineering Ethics and Professionalism1
+or CGS 3065 Legal and Social Issues in Computing
+Major Electives 118
+Select from:
+CIS 4905Individual Study in CISE
+CIS 4930Special Topics in CISE
+CIS 4940Practical Work
+CIS 4949Co-Op Work in CISE
+EGN 4912Engineering Directed Independent Research
+EGN 4951Integrated Product and Process Design 1
+EIN 3354Engineering Economy
+EEL 3701CDigital Logic and Computer Systems
+EEL 4744CMicroprocessor Applications
+Any 4000-level or higher CISE course, beyond the Core Requirements
+Interdisciplinary Electives14
+Total Credits100
+
+  1  Students should check prerequisites when planning their major electives. Students should discuss electives with an advisor in the department. Individual study, co-op, internship, research, and special topics credits must be approved by an advisor in the department.
+Technical Electives may also be:
+
+Any 4000-level or higher ECE or PHY course not taken to fulfill some other requirement, excluding EEL 4384 and most CGS courses.
+MAP 2302 or any 4000-level math or statistics course with the prefix STA, MAA, MAD, MAP, MAS, or MHF not fulfilling another requirement.
+Up to two 3000-level CAP courses.
+EGN 4038, EGN 4641, EGN 4643, EGS 4038, EGS 4641, or EGS 4643.
+
+Interdisciplinary Electives | Select one option
+Option A
+14 credits applicable toward formal minor and not counting for other requirements; completion of minor not required if it exceeds 14 credits. If completed minor contributes less than 14 credits, remaining credits can be fulfilled with additional 3000-level coursework in the area of the minor, 3000-level CISE courses, or 3000-level Engineering courses.
+Option B
+14 credits in a concentration area outside of CISE at 3000-level or higher (advisor approval required).
+Option C
+14 credits arranged with a department of interest which does not offer a formal minor.
+
+Critical Tracking records each student’s progress in courses that are required for progress toward each major. Please note the critical-tracking requirements below on a per-semester basis.
+Equivalent critical-tracking courses as determined by the State of Florida Common Course Prerequisites may be used for transfer students.
+Semester 1
+
+Complete 1 of 6 critical-tracking courses with a minimum grade of C within two attempts: MAC 2311, MAC 2312, MAC 2313, COP 3502C, PHY 2048, PHY 2049
+2.5 GPA required for all critical-tracking courses
+2.0 UF GPA required
+
+Semester 2
+
+Complete 1 additional critical-tracking course with a minimum grade of C within two attempts
+2.5 GPA required for all critical-tracking courses
+2.0 UF GPA required
+
+Semester 3
+
+Complete 2 additional critical-tracking courses with minimum grades of C within two attempts
+2.5 GPA required for all critical-tracking courses
+2.0 UF GPA required
+
+Semester 4
+
+Complete 1 additional critical-tracking course with minimum grades of C within two attempts
+2.5 GPA required for all critical-tracking courses
+2.0 UF GPA required
+
+Semester 5
+
+Complete all 6 critical-tracking courses with minimum grades of C in each course within two attempts
+2.5 GPA required for all critical-tracking courses
+2.0 UF GPA required
+
+Semester 6
+
+Complete COP 3503C and COT 3100
+2.0 departmental GPA required
+2.0 UF GPA required
+
+Semester 7
+
+Complete COP 3530
+2.0 departmental GPA required
+2.0 UF GPA required
+
+Semester 8
+
+Complete COP 4600 and COP 4020
+2.0 departmental GPA required
+2.0 UF GPA required
+
+
+
+Students are expected to complete the General Education International (GE-N) and Diversity (GE-D) requirements. This is often done concurrently with another General Education requirement (typically, GE-C, H or S).
+To remain on track, students must complete the appropriate critical-tracking courses, which appear in bold. These courses must be completed by the terms as listed above in the Critical Tracking criteria.
+This semester plan represents an example progression through the major. Actual courses and course order may be different depending on the student's academic record and scheduling availability of courses. Prerequisites still apply.
+
+Plan of Study Grid
+
+
+
+
+Semester OneCredits
+Quest 1 (Gen Ed Humanities)
+3
+
+COP 3502C
+Programming Fundamentals 1 (Critical Tracking)
+4
+
+EGN 2020C
+Engineering Design & Society (or other Gen Ed Physical Sciences course)
+2
+
+MAC 2311
+Analytic Geometry and Calculus 1 (Critical Tracking; State Core Gen Ed Mathematics)
+4
+
+ Credits13
+Semester Two
+COP 3503C
+Programming Fundamentals 2
+4
+
+COT 3100
+Applications of Discrete Structures
+3
+
+MAC 2312
+Analytic Geometry and Calculus 2 (Critical Tracking; Gen Ed Mathematics)
+4
+
+PHY 2048& 2048L
+Physics with Calculus 1and Laboratory for Physics with Calculus 1 (Critical Tracking; State Core Gen Ed Physical Sciences)
+4
+
+ Credits15
+Summer After Semester Two
+ENC 1101or ENC 1102
+Expository and Argumentative Writing (State Core GE Composition; Writing Requirement: 6,000 words)or Argument and Persuasion
+3
+
+State Core Gen Ed Biological or Physical Sciences
+3
+
+State Core Gen Ed Humanities
+3
+
+ Credits9
+Semester Three
+CDA 3101
+Introduction to Computer Organization
+3
+
+COP 3530
+Data Structures and Algorithm
+3
+
+MAC 2313
+Analytic Geometry and Calculus 3 (Critical Tracking; Gen Ed Mathematics)
+4
+
+PHY 2049& 2049L
+Physics with Calculus 2and Laboratory for Physics with Calculus 2 (Critical Tracking; Gen Ed Physical Sciences)
+4
+
+ Credits14
+Semester Four
+CEN 3031
+Introduction to Software Engineering
+3
+
+CIS 4301
+Information and Database Systems 1
+3
+
+ENC 3246
+Professional Communication for Engineers (Gen Ed Composition; Writing Requirement: 6,000 words)
+3
+
+MAS 3114or MAS 4105
+Computational Linear Algebraor Linear Algebra 1
+3-4
+
+Gen Ed Social and Behavioral Sciences with Diversity or International
+3
+
+ Credits15-16
+Semester Five
+Quest 2 (Gen Ed Social and Behavioral Sciences OR Gen Ed Biological or Physical Sciences)
+3
+
+COP 4600
+Operating Systems
+3
+
+STA 3032
+Engineering Statistics
+3
+
+Technical  elective
+3
+
+ Credits12
+Semester Six
+COP 4020
+Programming Language Concepts
+3
+
+COP 4533
+Algorithm Abstraction and Design
+3
+
+Interdisciplinary electives
+6
+
+Technical elective
+3
+
+ Credits15
+Summer After Semester Six
+Internship / Co-op (if desired)
+
+
+ Credits0
+Semester Seven
+CNT 4007
+Computer Network Fundamentals
+3
+
+EGS 4034or CGS 3065
+Engineering Ethics and Professionalismor Legal and Social Issues in Computing
+1-3
+
+Technical electives
+6
+
+Interdisciplinary elective
+3
+
+ Credits13-15
+Semester Eight
+EGN 4952or CIS 4914
+Integrated Product and Process Design 2or Senior Project
+3
+
+Technical electives
+6
+
+Interdisciplinary electives
+5
+
+ Credits14
+ Total Credits120
+
+
+
+
+The Herbert Wertheim College of Engineering's Computer Science program combines a strong engineering technical basis with a flexible interdisciplinary component and strong communication skills. This program emphasizes the technical aspects of computer science and is less flexible than the computer science program in the College of Liberal Arts and Sciences.
+Before Graduating Students Must
+
+Pass assessment according to department rubric of student performance on a major design experience.
+Pass assessment in one or more core courses of individual assignments targeted to each SLO.
+Complete requirements for the baccalaureate degree, as determined by faculty.
+
+Students in the Major Will Learn to
+Student Learning Outcomes | SLOs
+Content
+
+Apply knowledge of mathematics and science to computer science problems.
+Design and conduct computer-science experiments, analyzing, and interpreting the data.
+
+Critical Thinking
+
+Design a computer science system, component or process to meet desired needs within realistic economic, environmental, social, political, ethical, health and safety, manufacturability, and sustainability constraints.
+
+Communication
+
+Communicate technical data and design information effectively in writing and in speech to other computer scientists and engineers.
+
+Curriculum Map
+I = Introduced; R = Reinforced; A = Assessed
+
+Academic Learning Compact 4
+
+
+
+Courses
+SLO 1
+SLO 2
+SLO 3
+SLO 4
+
+
+
+CDA 3101
+
+
+I
+
+
+CEN 3031
+
+
+
+I, A
+
+CIS 4914
+A
+A
+A
+A
+
+COP 4600
+I, A
+I, A
+
+
+
+
+
+Assessment Types
+
+Assignments
+Exams
+Reports
+Exit survey
+
+
+
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+University of Florida
+
+
+
+
+
+UF Registrar on Facebook
+
+
+
+UF Registrar on Twitter
+
+
+
+UF Registrar on Instagram
+
+
+
+UF Registrar on YouTube
+
+
+
+					Office of the University Registrar
+					Division of Enrollment Management
+
+					1478 Union Road
+					S107L Criser Hall - PO Box 114000
+					Gainesville, FL 32611-4000 
+
+					Phone: 352.392.2244; Fax: 352.846.1126 
+
+
+
+
+
+Resources
+
+Consumer Information Disclosure
+UF Directory
+Update My Address
+Written Student Complaints
+
+
+
+Helpful Links
+
+Admissions
+Dean of Students Office
+Student Financial Aid and Scholarships
+UF Curriculum Committee
+University Bursar
+Veterans
+
+
+
+Connect
+
+Mission and Values
+Contact Us
+OneStop
+
+
+
+
+
+
+Back to Top
+
+
+
+
+Print Options
+
+
+
+
+Send Page to Printer
+
+
+Print this page.
+
+
+Download Page (PDF)The PDF will include all information unique to this page.Download PDF of 2023-2024 CatalogAll pages in 2023-2024 Academic Catalog. 
+
+
+Cancel
+
+
+
+
+
