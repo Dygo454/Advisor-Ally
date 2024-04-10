@@ -24,7 +24,7 @@ venv\Scripts\activate.bat
 python server.py
 
 ```
-Unix Based Systems:
+Unix Based Systems (or powershell):
 ```
 cd backend
 ./venv/Scripts/activate
