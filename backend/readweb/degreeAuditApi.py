@@ -2,9 +2,10 @@
 import json
 import requests
 from flask import Flask, make_response, redirect, request
-import requests_oauthlib
+from selenium import webdriver
 
 app = Flask(__name__)
+shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f"
 
 # @app.route("/")
 # def root():
@@ -140,7 +141,7 @@ def root():
         </script>
     </head>
     <body>
-        <h1>Sign in on one.uf and input your '_shibsession_' cookie in the signin page.</h1><br>
+        <h1>Sign in with your uf username and password, then accept the duo push!</h1><br>
         <a href="/signin">Sign in page!</a><br><br>
         <button onclick="getWhatIf()">Get what if! (will currently be CSE major + DAS minor)</button><br>
         <p id="response" style="white-space: pre-wrap">NO RESPONSE YET!</p>
@@ -149,14 +150,32 @@ def root():
 
 @app.route("/signin")
 def signIn():
+    if "failed_login" in request.args.keys() and request.args.get("failed_login") == "true":
+        return """<!doctype html>
+<html>
+    <head></head>
+    <body>
+        <h1>Your One.UF sign in below:</h1>
+        <h2 style="color:red;">Username or password were incorrect!</h2>
+        <form action="/setsessioncookie" method="get">
+            <label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">Log In:</label><br>
+            <!--<input type="text" id="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" name="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" value="" required><br>-->
+            <input type="text" id="USERNAME" name="USERNAME" value="" required><br>
+            <input type="password" id="PASSWORD" name="PASSWORD" value="" required><br>
+            <input type="submit" value="Use ID">
+        </form>
+    </body>
+</html>"""
     return """<!doctype html>
 <html>
     <head></head>
     <body>
         <h1>Your One.UF sign in below:</h1>
         <form action="/setsessioncookie" method="get">
-            <label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">SessionID:</label><br>
-            <input type="text" id="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" name="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" value="" required><br>
+            <label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">Log In:</label><br>
+            <!--<input type="text" id="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" name="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" value="" required><br>-->
+            <input type="text" id="USERNAME" name="USERNAME" value="" required><br>
+            <input type="password" id="PASSWORD" name="PASSWORD" value="" required><br>
             <input type="submit" value="Use ID">
         </form>
     </body>
@@ -165,15 +184,31 @@ def signIn():
 @app.route("/setsessioncookie", methods=['GET'])
 def setCooikie():
     resp = make_response(redirect('/'))
-    print(request)
-    shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f"
-    resp.set_cookie(shib,request.args.get(shib))
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    options.add_argument('window-size=1200x600')
+    driver = webdriver.Chrome()
+    driver.get("https://one.uf.edu/shib/login")
+    driver.find_element(value="username").send_keys(request.args.get('USERNAME'))
+    driver.find_element(value="password").send_keys(request.args.get('PASSWORD'))
+    driver.find_element(value='submit').click()
+    while driver.current_url != "https://one.uf.edu/":
+        if driver.current_url == "https://login.ufl.edu/idp/profile/SAML2/Redirect/SSO?execution=e1s2":
+            if len(driver.find_elements(by="class name", value="error")) > 0:
+                driver.close()
+                return redirect("/signin?failed_login=true")
+        try:
+            driver.find_element(value="dont-trust-browser-button").click()
+        except:
+            pass
+    resp.set_cookie(shib, driver.get_cookie(shib)["value"])
+    driver.close()
     return resp
 
 @app.route("/whatif")
 def getWhatIf():
     s = requests.session()
-    shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f"
     s.cookies.set(shib,request.cookies.get(shib))
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
