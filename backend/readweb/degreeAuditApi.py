@@ -1,7 +1,7 @@
 # import asyncio
 import json
 import requests
-from flask import Flask, make_response, redirect, request
+from flask import Flask, make_response, redirect, request, Response
 from selenium import webdriver
 
 app = Flask(__name__)
@@ -158,7 +158,7 @@ def signIn():
         <h1>Your One.UF sign in below:</h1>
         <h2 style="color:red;">Username or password were incorrect!</h2>
         <form action="/setsessioncookie" method="get">
-            <label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">Log In:</label><br>
+            <!--<label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">Log In:</label><br>-->
             <!--<input type="text" id="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" name="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" value="" required><br>-->
             <input type="text" id="USERNAME" name="USERNAME" value="" required><br>
             <input type="password" id="PASSWORD" name="PASSWORD" value="" required><br>
@@ -171,18 +171,18 @@ def signIn():
     <head></head>
     <body>
         <h1>Your One.UF sign in below:</h1>
-        <form action="/setsessioncookie" method="get">
-            <label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">Log In:</label><br>
+        <form action="/setsessioncookie" method="post">
+            <!--<label for="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f">Log In:</label><br>-->
             <!--<input type="text" id="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" name="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f" value="" required><br>-->
             <input type="text" id="USERNAME" name="USERNAME" value="" required><br>
             <input type="password" id="PASSWORD" name="PASSWORD" value="" required><br>
-            <input type="submit" value="Use ID">
+            <input type="submit" value="Log In">
         </form>
     </body>
 </html>"""
 
-@app.route("/setsessioncookie", methods=['GET'])
-def setCooikie():
+@app.route("/setsessioncookie", methods=['POST'])
+def setCookie():
     resp = make_response(redirect('/'))
 
     options = webdriver.ChromeOptions()
@@ -190,8 +190,8 @@ def setCooikie():
     options.add_argument('window-size=1200x600')
     driver = webdriver.Chrome()
     driver.get("https://one.uf.edu/shib/login")
-    driver.find_element(value="username").send_keys(request.args.get('USERNAME'))
-    driver.find_element(value="password").send_keys(request.args.get('PASSWORD'))
+    driver.find_element(value="username").send_keys(request.form.get('USERNAME'))
+    driver.find_element(value="password").send_keys(request.form.get('PASSWORD'))
     driver.find_element(value='submit').click()
     while driver.current_url != "https://one.uf.edu/":
         if driver.current_url == "https://login.ufl.edu/idp/profile/SAML2/Redirect/SSO?execution=e1s2":
