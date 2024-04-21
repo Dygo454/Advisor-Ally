@@ -193,5 +193,50 @@ def getWhatIf():
     response = s.post("https://one.uf.edu/api/degreeaudit/getwhatifaudit", json=whatIfAuditStack)
     return response.json()
 
+def make_prompts(whatIf, userPrompt):
+    career = whatIf["careers"][0]
+    planGroups = career["planGroups"]
+    coursesLeft = []
+    for group in planGroups:
+        if group["met"]:
+            continue
+        groupCheckList = {"title":group["title"],"requirements":[]}
+        for req in group["requirements"]:
+            if req["met"]:
+                continue
+            reqCheckList = {"title":req["title"],"subrequrements":[]}
+            for subReq in req["subrequirements"]:
+                if subReq["met"]:
+                    continue
+                subReqCheckList = {"title":req["title"],"description":subReq["description"]}
+                if subReq["unitsRequired"] != 0:
+                    subReqCheckList["credits"] = subReq["unitsNeeded"]
+                elif subReq["courseRequired"] != 0:
+                    subReqCheckList["courses"] = subReq["courseNeeded"]
+                reqCheckList["subrequrements"] += subReqCheckList
+            groupCheckList["requirements"] += reqCheckList
+        coursesLeft += groupCheckList
+    initializerPrompt = """You will recieve a list of the student's remaining requirements.
+For your response make a list of necessary catalog searches.
+\tIf there is a category without specific course codes (such as elective categories):
+\t\tUsing the subrequirement description, add to the list a course code to search.
+\t\tAn example:
+\t\t\tCAP
+\t\t\tCIS
+\t\t\tEEL
+\tIf there isn't a need to search for course codes (all remaining requirements are specific classes or a single class of a category, like quest classes):
+\t\tThen say exactly: "None"
+"""
+    reqPrompt = ""
+    for group in coursesLeft:
+        reqPrompt += group["title"]
+        for req in group["requirements"]:
+            reqPrompt += "\t"+req["title"]
+            for subreq in req["requirements"]:
+                reqPrompt += "\t\t"+req["title"]
+                reqPrompt += "\t\tDescription: "+req["description"]
+                reqPrompt += "\t\t"+("Credits: "+subreq["credits"] if subreq.get("credits") else "Courses: "+subreq["courses"])
+    return reqPrompt
+
 if __name__ == "__main__":
     app.run(debug=True)
