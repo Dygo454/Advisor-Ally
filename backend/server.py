@@ -3,14 +3,15 @@ from flask import Flask, request
 from openai import OpenAI
 import requests
 from flask import Flask, make_response, request, Response
+import requests.cookies
 from selenium import webdriver
 
 app = Flask(__name__)
 client = OpenAI()
-allowedOrigins = "*"
+allowedOrigins = "http://localhost:3000/"
 allowedHeaders = "*"
 allowedMethods = "*"
-currentRoot = "http://localhost:5000"
+currentRoot = "*"
 shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f"
 
 # @app.route("/")
@@ -135,12 +136,10 @@ def setCookie():
 @app.route("/whatif")
 def getWhatIf():
     s = requests.session()
-    s.cookies.set(shib,request.cookies.get(shib))
-    csrf = s.get("https://one.uf.edu/api/csrftoken/")
-    s.headers["X-Csrf-Token"] = csrf.json()["CSRFToken"]
+    s.cookies.set(shib,request.cookies.get(shib))#,domain="one.uf.edu")
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
-        print(user.json())
+        print(user.headers)
         resp = Response('{"error":"Not logged in!"}', status=401 ,mimetype="application/json")
         resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
         resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
