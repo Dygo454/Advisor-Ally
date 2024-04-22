@@ -1,10 +1,16 @@
+import json
 from flask import Flask, request
-from readweb.readweb import getSemesterPlan
+from openai import OpenAI
 import requests
-from flask import Flask, make_response, redirect, request, Response
+from flask import Flask, make_response, request, Response
 from selenium import webdriver
 
 app = Flask(__name__)
+client = OpenAI()
+allowedOrigins = "*"
+allowedHeaders = "*"
+allowedMethods = "*"
+currentRoot = "http://localhost:5000"
 shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f"
 
 # @app.route("/")
@@ -61,7 +67,7 @@ shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a656
 #         return json.dumps(await getSemesterPlan(prompt))
 #     else:
 #         return json.dumps({"error":"No input prompt detected!", "data":{}})
-@app.rout("/")
+@app.route("/")
 def root():
     return """<!doctype html>
 <html>
@@ -74,25 +80,52 @@ def root():
     </body>
 </html>"""
 
-@app.route("/login", methods=['POST'])
+@app.route("/login", methods=['POST', 'OPTIONS'])
 def setCookie():
-    resp = make_response(redirect((request.args.get("redirect_uri", "/"))))
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
+        response.headers.add("Access-Control-Allow-Headers", allowedHeaders)
+        response.headers.add("Access-Control-Allow-Methods", allowedMethods)
+        response.headers.set("Access-Control-Allow-Credentials", "true")
+        return response
+    resp = Response(status=200)
+    resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
+    resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
+    resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
+    resp.headers.set("Access-Control-Allow-Credentials", "true")
 
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1200x600')
     driver = webdriver.Chrome()
     driver.get("https://one.uf.edu/shib/login")
-    driver.find_element(value="username").send_keys(request.form.get('USERNAME'))
-    driver.find_element(value="password").send_keys(request.form.get('PASSWORD'))
+    driver.find_element(value="username").send_keys(request.json.get('USERNAME'))
+    driver.find_element(value="password").send_keys(request.json.get('PASSWORD'))
     driver.find_element(value='submit').click()
     while driver.current_url != "https://one.uf.edu/":
         if driver.current_url == "https://login.ufl.edu/idp/profile/SAML2/Redirect/SSO?execution=e1s2":
             if len(driver.find_elements(by="class name", value="error")) > 0:
                 driver.close()
-                return Response({"error":"Invalid Username/Password"}, status=401)
+                resp = Response('{"error":"Invalid Username/Password!"}', status=401 ,mimetype="application/json")
+                resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
+                resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
+                resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
+                resp.headers.set("Access-Control-Allow-Credentials", "true")
+                return resp
         try:
             driver.find_element(value="dont-trust-browser-button").click()
+        except:
+            pass
+        try:
+            if (driver.find_element(webdriver.common.by.By.CLASS_NAME,value="action-link").text == "Go back"):
+                driver.close()
+                resp = Response('{"error":"Failed duo push!"}', status=401 ,mimetype="application/json")
+                resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
+                resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
+                resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
+                resp.headers.set("Access-Control-Allow-Credentials", "true")
+                return resp
         except:
             pass
     resp.set_cookie(shib, driver.get_cookie(shib)["value"])
@@ -103,23 +136,28 @@ def setCookie():
 def getWhatIf():
     s = requests.session()
     s.cookies.set(shib,request.cookies.get(shib))
+    csrf = s.get("https://one.uf.edu/api/csrftoken/")
+    s.headers["X-Csrf-Token"] = csrf.json()["CSRFToken"]
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
         print(user.json())
-        return """<!doctype html>
-<html>
-    <head></head>
-    <body><h1>User not signed in!</h1></body>
-</html>
-"""
+        resp = Response('{"error":"Not logged in!"}', status=401 ,mimetype="application/json")
+        resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
+        resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
+        resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
+        resp.headers.set("Access-Control-Allow-Credentials", "true")
+        return resp
     whatIfAuditStack = {"WhatIfAuditStack" : [
         {"ACAD_STACK": "UGRD|UGENG|CPE_BSCO", "acadStackDescr": "Computer Engineering - BS in Computer Engineering"},
         {"ACAD_STACK": "UGRD|UGACT|DAR_UMN", "acadStackDescr": "Digital Arts and Sciences - Undergraduate Minor"}
     ]}
-    csrf = s.get("https://one.uf.edu/api/csrftoken/")
-    s.headers["X-Csrf-Token"] = csrf.json()["CSRFToken"]
     response = s.post("https://one.uf.edu/api/degreeaudit/getwhatifaudit", json=whatIfAuditStack)
-    return response.json()
+    resp = Response(json.dumps(response.json()), status=200 ,mimetype="application/json")
+    resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
+    resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
+    resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
+    resp.headers.set("Access-Control-Allow-Credentials", "true")
+    return resp
 
 def make_prompts(whatIf):
     career = whatIf["careers"][0]
@@ -144,8 +182,9 @@ def make_prompts(whatIf):
                 reqCheckList["subrequrements"] += subReqCheckList
             groupCheckList["requirements"] += reqCheckList
         coursesLeft += groupCheckList
-    initializerPrompt = """You will recieve a list of the student's remaining requirements.
-For your response make a list of necessary catalog searches.
+    initializerPrompt = """You are an academic advisor for UF, your ultimate goal is to make a schedule for this student.
+You will recieve a list of the student's remaining requirements.
+For your response to that message you will make a list of necessary catalog searches (you will not make the schedule yet).
 \tIf there is a category without specific course codes (such as elective categories):
 \t\tUsing the subrequirement description, add to the list a course code to search.
 \t\tAn example:
@@ -164,7 +203,74 @@ For your response make a list of necessary catalog searches.
                 reqPrompt += "\t\t"+req["title"]
                 reqPrompt += "\t\tDescription: "+req["description"]
                 reqPrompt += "\t\t"+("Credits: "+subreq["credits"] if subreq.get("credits") else "Courses: "+subreq["courses"])
-    return reqPrompt
+    return (initializerPrompt, reqPrompt)
+
+@app.route("/get_schedule")
+def get_schedule():
+    resp = request.json["payload"]
+    init, info = make_prompts(resp)
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": init},
+            {"role": "user", "content": info}
+        ]
+    )
+    plan = json.loads(response.choices[0].message.model_dump_json())["content"]
+    plan = plan[(plan.find("Output:")+8):]
+    respondToGPT = ""
+    for line in plan:
+        print(line)
+        resp = requests.get("https://one.ufl.edu/apix/soc/schedule/?category=CWSP&term=2248&course-code="+line)
+        courses = resp.json()[0]["COURSES"]
+        for i in range(min(20,len(courses))):
+            if len(courses["sections"]) == 0:
+                continue
+            code = courses[i]["code"]
+            name = courses[i]["name"]
+            credits = courses[i]["sections"][0]["credits"]
+            respondToGPT += f"course code: {code};"
+            respondToGPT += f"course name: {name};"
+            respondToGPT += f"course credits: {credits};\n"
+    return ""
+    init = """You are an academic advisor for UF, your ultimate goal is to make a schedule for this student.
+This is your second message and as a response to the first the user will input the requested info.
+Using the previous info and the one you will recieve, you will write a completed schedule in the format below.
+ONLY replace the info in angle brackets with the corresponding text and ONLY acknoledge '...' as meaning there can be multiple lines of the surrounding format.
+These are very strict conditions that you CANNOT break no matter what the user input in the first line:"
+Year <year number>:
+    Summer Semester:
+        Classes:
+            <course code>: <course title> (<credits>)
+            ...
+            <course code>: <course title> (<credits>)
+    Fall Semester:
+        Classes:
+            <course code>: <course title> (<credits>)
+            ...
+            <course code>: <course title> (<credits>)
+    Spring Semester:
+        Classes:
+            <course code>: <course title> (<credits>)
+            ...
+            <course code>: <course title> (<credits>)
+"
+you should generate 4 years based on the given information."""
+    info = request.args.get("prompt","No special preferences.")
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": init},
+            {"role": "user", "content": info}
+        ]
+    )
+    plan = json.loads(response.choices[0].message.model_dump_json())["content"]
+    plan = plan[(plan.find("Output:")+8):]
+    resp = Response('{'+f'"data":"{plan}"'+'}', status=200, mimetype="application/json")
+    resp.headers.set("Access-Control-Allow-Origin", allowedOrigins)
+    resp.headers.set("Access-Control-Allow-Headers", allowedOrigins)
+    resp.headers.set("Access-Control-Allow-Methods", allowedOrigins)
+    return resp
 
 if __name__ == "__main__":
     app.run(debug=True)
