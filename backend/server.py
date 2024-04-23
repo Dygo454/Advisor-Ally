@@ -7,7 +7,6 @@ import requests.cookies
 from selenium import webdriver
 
 app = Flask(__name__)
-client = OpenAI()
 allowedOrigins = "http://localhost:3000"
 allowedHeaders = "*"
 allowedMethods = "*"
@@ -136,11 +135,9 @@ def setCookie():
 @app.route("/whatif")
 def getWhatIf():
     s = requests.session()
-    s.cookies.set(shib,request.cookies.get(shib))
-    s.cookies.set(shib,"_15287f57cfafb88742beb9a92848c88c")
+    s.cookies.set(shib,"HARDCODEDSESSIONIDHERE!!!!!") # TODO: insert session ID
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
-        print(user.json())
         resp = Response('{"error":"Not signed in!"}',status=401)
         return resp
     whatIfAuditStack = {"WhatIfAuditStack" : [
@@ -160,7 +157,6 @@ def make_prompts(whatIf):
     career = whatIf["careers"][0]
     planGroups = career["planGroups"]
     coursesLeft = []
-    print(planGroups)
     for groups in planGroups:
         for group in groups:
             if group["met"]:
@@ -169,7 +165,7 @@ def make_prompts(whatIf):
             for req in group["requirements"]:
                 if req["met"]:
                     continue
-                reqCheckList = {"title":req["title"],"subrequrements":[]}
+                reqCheckList = {"title":req["title"],"description":req["description"],"subRequirements":[]}
                 for subReq in req["subRequirements"]:
                     if subReq["met"]:
                         continue
@@ -178,9 +174,9 @@ def make_prompts(whatIf):
                         subReqCheckList["credits"] = subReq["unitsNeeded"]
                     elif subReq["courseRequired"] != 0:
                         subReqCheckList["courses"] = subReq["courseNeeded"]
-                    reqCheckList["subrequrements"] += subReqCheckList
-                groupCheckList["requirements"] += reqCheckList
-            coursesLeft += groupCheckList
+                    reqCheckList["subRequirements"].append(subReqCheckList)
+                groupCheckList["requirements"].append(reqCheckList)
+            coursesLeft.append(groupCheckList)
     initializerPrompt = """You are an academic advisor for UF, your ultimate goal is to make a schedule for this student.
 You will recieve a list of the student's remaining requirements.
 For your response to that message you will make a list of necessary catalog searches (you will not make the schedule yet).
@@ -195,14 +191,13 @@ For your response to that message you will make a list of necessary catalog sear
 """
     reqPrompt = ""
     for group in coursesLeft:
-        print(group)
         reqPrompt += group["title"]
         for req in group["requirements"]:
-            reqPrompt += "\t"+req["title"]
-            for subreq in req["requirements"]:
-                reqPrompt += "\t\t"+req["title"]
-                reqPrompt += "\t\tDescription: "+req["description"]
-                reqPrompt += "\t\t"+("Credits: "+subreq["credits"] if subreq.get("credits") else "Courses: "+subreq["courses"])
+            reqPrompt += "\n\t"+req["title"]
+            for subreq in req["subRequirements"]:
+                reqPrompt += "\n\t\t"+req["title"]
+                reqPrompt += "\n\t\tDescription: "+req["description"]
+                reqPrompt += "\n\t\t"+("Credits: "+str(subreq["credits"]) if subreq.get("credits") else ("Courses: "+str(subreq["courses"]) if subreq.get("courses") else "Credits/Courses: Unknown"))
     return (initializerPrompt, reqPrompt)
 
 @app.route("/get_schedule", methods=["OPTIONS", "POST"])
@@ -213,6 +208,7 @@ def get_schedule():
         resp.headers['Access-Control-Allow-Headers'] = allowedHeaders
         resp.headers['Access-Control-Allow-Methods'] = allowedMethods
         return resp
+    client = OpenAI()
     resp = request.json
     init, info = make_prompts(resp)
     response = client.chat.completions.create(
@@ -223,14 +219,13 @@ def get_schedule():
         ]
     )
     plan = json.loads(response.choices[0].message.model_dump_json())["content"]
-    plan = plan[(plan.find("Output:")+8):]
+    plan = plan[((plan.find("Output:") if "Output:" in plan else -8)+8):]
     respondToGPT = ""
-    for line in plan:
-        print(line)
+    for line in plan.split():
         resp = requests.get("https://one.ufl.edu/apix/soc/schedule/?category=CWSP&term=2248&course-code="+line)
         courses = resp.json()[0]["COURSES"]
         for i in range(min(20,len(courses))):
-            if len(courses["sections"]) == 0:
+            if len(courses[i]["sections"]) == 0:
                 continue
             code = courses[i]["code"]
             name = courses[i]["name"]
@@ -238,11 +233,6 @@ def get_schedule():
             respondToGPT += f"course code: {code};"
             respondToGPT += f"course name: {name};"
             respondToGPT += f"course credits: {credits};\n"
-    resp = Response("{'data':'erm'}",status=200, mimetype="application/json")
-    resp.headers['Access-Control-Allow-Origin'] = allowedOrigins
-    resp.headers['Access-Control-Allow-Headers'] = allowedHeaders
-    resp.headers['Access-Control-Allow-Methods'] = allowedMethods
-    return resp
     init = """You are an academic advisor for UF, your ultimate goal is to make a schedule for this student.
 This is your second message and as a response to the first the user will input the requested info.
 Using the previous info and the one you will recieve, you will write a completed schedule in the format below.
@@ -265,7 +255,14 @@ Year <year number>:
             ...
             <course code>: <course title> (<credits>)
 "
-you should generate 4 years based on the given information."""
+You should generate up to the 4th year by default based on the given information.
+A small segment as an example of this format:
+Year 3:
+    Summer Semester:
+        Classes:
+            COP3503: Programming Fundamentals 2 (4)
+            EGN2020C: Engineering Design and Society (2)
+This is a very strict format you MUST follow for all the semesters and years involved."""
     info = request.args.get("prompt","No special preferences.")
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -275,7 +272,7 @@ you should generate 4 years based on the given information."""
         ]
     )
     plan = json.loads(response.choices[0].message.model_dump_json())["content"]
-    plan = plan[(plan.find("Output:")+8):]
+    plan = plan[((plan.find("Output:") if "Output:" in plan else -8)+8):].replace("\n","\\n")
     resp = Response('{'+f'"data":"{plan}"'+'}', status=200, mimetype="application/json")
     resp.headers.set("Access-Control-Allow-Origin", allowedOrigins)
     resp.headers.set("Access-Control-Allow-Headers", allowedOrigins)

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useCookies } from "react-cookie";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import './style.css';
 
 import {
@@ -10,18 +10,17 @@ import {
 }
     from 'mdb-react-ui-kit';
 
-
 function Login() {
     const navigate = useNavigate();
     let shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f"
     let loading = false;
-    // const [_, setCookies] = useCookies(["access_token"])
+    const [_, setCookies] = useCookies(["access_token"])
     const useLoginResponse = async (resp) => {
         if (resp.status === 200) {
-            // let setCookie = document.cookie;
-            // let ind1 = setCookie.indexOf(shib)+shib.length+1;
-            // let ind2 = setCookie.indexOf(";", ind1);
-            // setCookies(shib, setCookie.substring(ind1,ind2), {path: '/plan'});
+            let setCookie = document.cookie;
+            let ind1 = setCookie.indexOf(shib)+shib.length+1;
+            let ind2 = setCookie.indexOf(";", ind1);
+            localStorage.setItem(shib, setCookie.substring(ind1,ind2));
             navigate("/plan");
         }
         else if (resp.status === 401) {
