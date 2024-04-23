@@ -8,6 +8,9 @@
     color: #000000;
 }
 
+.ripple-wave.active {
+    display: none;
+}
 
 .bg-custom {
     background-color: #e5e7eb;
