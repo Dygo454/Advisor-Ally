@@ -8,7 +8,7 @@ from selenium import webdriver
 
 app = Flask(__name__)
 client = OpenAI()
-allowedOrigins = "http://localhost:3000/"
+allowedOrigins = "http://localhost:3000"
 allowedHeaders = "*"
 allowedMethods = "*"
 currentRoot = "*"
@@ -136,51 +136,51 @@ def setCookie():
 @app.route("/whatif")
 def getWhatIf():
     s = requests.session()
-    s.cookies.set(shib,request.cookies.get(shib))#,domain="one.uf.edu")
+    s.cookies.set(shib,request.cookies.get(shib))
+    s.cookies.set(shib,"_15287f57cfafb88742beb9a92848c88c")
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
-        print(user.headers)
-        resp = Response('{"error":"Not logged in!"}', status=401 ,mimetype="application/json")
-        resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
-        resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
-        resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
-        resp.headers.set("Access-Control-Allow-Credentials", "true")
+        print(user.json())
+        resp = Response('{"error":"Not signed in!"}',status=401)
         return resp
     whatIfAuditStack = {"WhatIfAuditStack" : [
         {"ACAD_STACK": "UGRD|UGENG|CPE_BSCO", "acadStackDescr": "Computer Engineering - BS in Computer Engineering"},
         {"ACAD_STACK": "UGRD|UGACT|DAR_UMN", "acadStackDescr": "Digital Arts and Sciences - Undergraduate Minor"}
     ]}
+    csrf = s.get("https://one.uf.edu/api/csrftoken/")
+    s.headers["X-Csrf-Token"] = csrf.json()["CSRFToken"]
     response = s.post("https://one.uf.edu/api/degreeaudit/getwhatifaudit", json=whatIfAuditStack)
-    resp = Response(json.dumps(response.json()), status=200 ,mimetype="application/json")
-    resp.headers.set("Access-Control-Allow-Origin", request.headers.get("origin",allowedHeaders))
-    resp.headers.set("Access-Control-Allow-Headers", allowedHeaders)
-    resp.headers.set("Access-Control-Allow-Methods", allowedMethods)
-    resp.headers.set("Access-Control-Allow-Credentials", "true")
+    resp = Response(json.dumps(response.json()),status=200)
+    resp.headers['Access-Control-Allow-Origin'] = allowedOrigins
+    resp.headers['Access-Control-Allow-Headers'] = allowedHeaders
+    resp.headers['Access-Control-Allow-Methods'] = allowedMethods
     return resp
 
 def make_prompts(whatIf):
     career = whatIf["careers"][0]
     planGroups = career["planGroups"]
     coursesLeft = []
-    for group in planGroups:
-        if group["met"]:
-            continue
-        groupCheckList = {"title":group["title"],"requirements":[]}
-        for req in group["requirements"]:
-            if req["met"]:
+    print(planGroups)
+    for groups in planGroups:
+        for group in groups:
+            if group["met"]:
                 continue
-            reqCheckList = {"title":req["title"],"subrequrements":[]}
-            for subReq in req["subrequirements"]:
-                if subReq["met"]:
+            groupCheckList = {"title":group["title"],"requirements":[]}
+            for req in group["requirements"]:
+                if req["met"]:
                     continue
-                subReqCheckList = {"title":req["title"],"description":subReq["description"]}
-                if subReq["unitsRequired"] != 0:
-                    subReqCheckList["credits"] = subReq["unitsNeeded"]
-                elif subReq["courseRequired"] != 0:
-                    subReqCheckList["courses"] = subReq["courseNeeded"]
-                reqCheckList["subrequrements"] += subReqCheckList
-            groupCheckList["requirements"] += reqCheckList
-        coursesLeft += groupCheckList
+                reqCheckList = {"title":req["title"],"subrequrements":[]}
+                for subReq in req["subRequirements"]:
+                    if subReq["met"]:
+                        continue
+                    subReqCheckList = {"title":req["title"],"description":subReq["description"]}
+                    if subReq["unitsRequired"] != 0:
+                        subReqCheckList["credits"] = subReq["unitsNeeded"]
+                    elif subReq["courseRequired"] != 0:
+                        subReqCheckList["courses"] = subReq["courseNeeded"]
+                    reqCheckList["subrequrements"] += subReqCheckList
+                groupCheckList["requirements"] += reqCheckList
+            coursesLeft += groupCheckList
     initializerPrompt = """You are an academic advisor for UF, your ultimate goal is to make a schedule for this student.
 You will recieve a list of the student's remaining requirements.
 For your response to that message you will make a list of necessary catalog searches (you will not make the schedule yet).
@@ -195,6 +195,7 @@ For your response to that message you will make a list of necessary catalog sear
 """
     reqPrompt = ""
     for group in coursesLeft:
+        print(group)
         reqPrompt += group["title"]
         for req in group["requirements"]:
             reqPrompt += "\t"+req["title"]
@@ -204,9 +205,15 @@ For your response to that message you will make a list of necessary catalog sear
                 reqPrompt += "\t\t"+("Credits: "+subreq["credits"] if subreq.get("credits") else "Courses: "+subreq["courses"])
     return (initializerPrompt, reqPrompt)
 
-@app.route("/get_schedule")
+@app.route("/get_schedule", methods=["OPTIONS", "POST"])
 def get_schedule():
-    resp = request.json["payload"]
+    if request.method == "OPTIONS":
+        resp = Response(status=200)
+        resp.headers['Access-Control-Allow-Origin'] = allowedOrigins
+        resp.headers['Access-Control-Allow-Headers'] = allowedHeaders
+        resp.headers['Access-Control-Allow-Methods'] = allowedMethods
+        return resp
+    resp = request.json
     init, info = make_prompts(resp)
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -231,7 +238,11 @@ def get_schedule():
             respondToGPT += f"course code: {code};"
             respondToGPT += f"course name: {name};"
             respondToGPT += f"course credits: {credits};\n"
-    return ""
+    resp = Response("{'data':'erm'}",status=200, mimetype="application/json")
+    resp.headers['Access-Control-Allow-Origin'] = allowedOrigins
+    resp.headers['Access-Control-Allow-Headers'] = allowedHeaders
+    resp.headers['Access-Control-Allow-Methods'] = allowedMethods
+    return resp
     init = """You are an academic advisor for UF, your ultimate goal is to make a schedule for this student.
 This is your second message and as a response to the first the user will input the requested info.
 Using the previous info and the one you will recieve, you will write a completed schedule in the format below.

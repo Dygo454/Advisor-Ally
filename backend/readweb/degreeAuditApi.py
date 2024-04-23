@@ -181,7 +181,7 @@ def signIn():
     </body>
 </html>"""
 
-@app.route("/setsessioncookie", methods=['POST'])
+@app.route("/login", methods=['POST'])
 def setCookie():
     resp = make_response(redirect('/'))
 
