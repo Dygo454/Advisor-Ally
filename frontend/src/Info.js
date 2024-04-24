@@ -38,7 +38,7 @@ function Info() {
             }
             i++;
         }, 500);
-        fetch("http://localhost:5000/whatif?session="+localStorage.getItem(shib),requestOptions).then((resp) => {
+        fetch("http://localhost:5000/whatif?session="+localStorage.getItem(shib)+"&major="+document.getElementById("my-dropdown").value,requestOptions).then((resp) => {
             if (resp.status === 401) {
                 alert("Not signed in!")
                 navigate("/login")
@@ -83,12 +83,17 @@ function Info() {
 
                 <MDBContainer className='p-3 my-5 d-flex flex-column w-50' style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', boxShadow: '0 0.5rem 1rem regba(0, 0, 0, 0.15' }}>
                     <div>
-                        {/* <label htmlFor='my-dropdown' style={{ marginRight: '10px' }}>Select an option</label>
-                        <select id='my-dropdown' value={ selectedValue } onChange={ handleSelectChange }>
-                            <option value=''></option>
-                            <option value='option1'>option 1</option>
-                            <option value='option2'>option 2</option>
-                        </select> */}
+                        <label htmlFor='my-dropdown' style={{ marginRight: '10px' }}>Select a major</label>
+                        <select id='my-dropdown' value={ selectedValue }>
+                            <option value='ARO_BSAE'>Aerospace Engineering</option>
+                            <option value='BE_BSBE'>Biological Engineering</option>
+                            <option value='CPE_BSCO'>Computer Engineering</option>
+                            <option value='CPS_BSCS'>Computer Science</option>
+                            <option value='ELE_BSEE'>Electrical Engineering</option>
+                        </select>   
+                        <br/>
+                        <br/>
+                        <label htmlFor='my-dropdown' style={{ marginRight: '10px' }}>Input extra info:</label>
                         <MDBTextArea id='prompt'></MDBTextArea>
                     </div>
                 </MDBContainer>

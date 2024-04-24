@@ -135,14 +135,22 @@ def setCookie():
 @app.route("/whatif")
 def getWhatIf():
     s = requests.session()
-    s.cookies.set(shib,"_9f10dce8d7ce56d96d2ca767ee57e8c5") # TODO: insert session ID
+    s.cookies.set(shib,"_3501a0e1a0c01487413b2e90664f2814") # TODO: insert session ID
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
         resp = Response('{"error":"Not signed in!"}',status=401)
         return resp
+    majors = s.get("https://one.uf.edu/api/degreeaudit/getwhatifselectoptions/").json()["whatIfOptions"]["UGRD"]["whatIfMajors"]
+    title = ""
+    for majorGroup in majors:
+        for programGroup in majorGroup["programGroup"]:
+            if programGroup["plan"] == request.args.get("major","CPS_BSCS"):
+                title = programGroup["planDescr"]
+                break
+        if title != "":
+            break
     whatIfAuditStack = {"WhatIfAuditStack" : [
-        {"ACAD_STACK": "UGRD|UGENG|CPE_BSCO", "acadStackDescr": "Computer Engineering - BS in Computer Engineering"},
-        {"ACAD_STACK": "UGRD|UGACT|DAR_UMN", "acadStackDescr": "Digital Arts and Sciences - Undergraduate Minor"}
+        {"ACAD_STACK": "UGRD|UGENG|"+request.args.get("major","CPS_BSCS"), "acadStackDescr": title}
     ]}
     csrf = s.get("https://one.uf.edu/api/csrftoken/")
     s.headers["X-Csrf-Token"] = csrf.json()["CSRFToken"]
