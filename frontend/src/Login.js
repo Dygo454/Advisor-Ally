@@ -21,7 +21,7 @@ function Login() {
             let ind1 = setCookie.indexOf(shib)+shib.length+1;
             let ind2 = setCookie.indexOf(";", ind1);
             localStorage.setItem(shib, setCookie.substring(ind1,ind2));
-            navigate("/plan");
+            navigate("/info");
         }
         else if (resp.status === 401) {
             resp.json().then((json) => {
@@ -60,11 +60,6 @@ function Login() {
                 <MDBInput wrapperClass='mb-4' placeholder='Password' id='PASSWORD' type='password' />
 
                 <MDBBtn className='mb-4' style={{ height: '2.4em' }} onClick={handleLogin} >Sign in</MDBBtn>
-                {/* <br />
-
-                <div className="text-center">
-                    <p>Not registered? <Link to='/signup'>Sign up</Link></p>
-                </div> */}
 
             </MDBContainer>
         </div>

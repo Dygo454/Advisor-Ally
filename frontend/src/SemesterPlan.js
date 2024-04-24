@@ -4,91 +4,81 @@ import './style.css';
 
 import {
     MDBContainer,
-    MDBBtn,
-    MDBTextArea
+    MDBNavbar,
+    MDBNavbarNav,
+    MDBNavbarItem,
+    MDBNavbarLink,
+    MDBNavbarBrand
 }
     from 'mdb-react-ui-kit';
-
-let i = 0;
-let loadInterval;
+import { useEffect } from 'react';
 
 function SemesterPlan() {
     let navigate = useNavigate();
-    let shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f";
-    let generatePlan = () => {
-        document.getElementById("planTitle").innerText = "";
-        document.getElementById("plan").innerText = "";
-        if (document.getElementById("button").firstChild.nodeValue != "Submit") {
-            return;
-        }
-        let prompt = document.getElementById("prompt").value;
-        const requestOptions = {
-            method: 'GET'
-        };
-        document.getElementById("button").firstChild.nodeValue = "loading";
-        loadInterval = setInterval(() => {
-            document.getElementById("button").firstChild.nodeValue += ".";
-            if (i >= 3) {
-                document.getElementById("button").firstChild.nodeValue = "loading.";
-                i = 0;
-            }
-            i++;
-        }, 500);
-        fetch("http://localhost:5000/whatif?session="+localStorage.getItem(shib),requestOptions).then((resp) => {
-            if (resp.status === 401) {
-                alert("Not signed in!")
-                navigate("/login")
-            }
-            else if (resp.status === 200) {
-                resp.json().then((json) => {
-                    const requestOptions2 = {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(json)
-                    };
-                    fetch("http://localhost:5000/get_schedule?prompt="+prompt,requestOptions2).then((resp) => {
-                        console.log(resp);
-                        if (resp.status === 401) {
-                            alert("Not signed in!")
-                            navigate("/login")
-                        }
-                        else if (resp.status === 200) {
-                            resp.json().then((json) => {
-                                document.getElementById("planTitle").innerText = "Generated text:";
-                                document.getElementById("plan").innerText = json.data;
-                                clearInterval(loadInterval);
-                                document.getElementById("button").firstChild.nodeValue = "Submit";
-                            });
-                        }
-                        else {
-                            ;
-                        }
-                    });
-                });
-            }
-            else {
-                ;
-            }
-        });
+    const shib="_shibsession_68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f68747470733a2f2f73702e6c6f67696e2e75666c2e6564752f75726e3a6564753a75666c3a70726f643a30303734312f";
+    let signout = () => {
+        localStorage.removeItem(shib);
+        localStorage.removeItem("data");
+        navigate("/login")
     };
+    let onLoad = () =>{
+        let data = localStorage.getItem("data");
+        let firstFound = false;
+        for (let i = 1; i < 6; i++) {
+            let ind = data.indexOf("Year "+i+":");
+            if (ind < 0) {
+                continue;
+            } else if (ind != 0 && !firstFound) {
+                localStorage.setItem("data","Year "+i-1+":\n"+data);
+                onLoad();
+                return;
+            }
+            firstFound = true;
+            ind += 8;
+            let ind2 = data.indexOf("Year "+(i+1)+":");
+            if (ind2 < 0) {
+                ind2 = data.length;
+            }
+            let currStr = data.substring(ind,ind2);
+            document.getElementById("y"+i+"Data").innerText = currStr;
+        }
+    };
+    useEffect(onLoad);
     return (
         <div style={{ paddingTop: '4rem' }}>
-            <h1 className='text-center'>Generate Sample Semester Plan!</h1>
-            <p className='text-center' style={{fontSize: '20px'}}>
-                Input advisor prompt below and press submit when ready!
-                <br/>
-                For the best results be specific, add info like current year/semester.
-            </p>
-            <MDBContainer className="p-3 my-5 d-flex flex-column w-25">
+            <MDBNavbar expand='sm' className='bg-body-tertiary'>
+                <MDBContainer>
+                    <MDBNavbarBrand>Advisor Ally</MDBNavbarBrand>
+                        <MDBNavbarNav left fullWidth={false} className='navbar-items'>
+                            <MDBNavbarItem>
+                                <MDBNavbarLink onClick={signout}>Log out</MDBNavbarLink>
+                            </MDBNavbarItem>
+                        </MDBNavbarNav>
+                </MDBContainer>
+            </MDBNavbar>
 
-                <MDBTextArea wrapperClass='mb-4' placeholder='Enter text here!' id='prompt' type='text' />
-                <MDBBtn className='mb-4' style={{ height: '2.4em' }} onClick={generatePlan} id='button' >Submit</MDBBtn>
+            <h2 className='mt-5 mb-4 text-center' style={{ fontSize: '24px' }}>Your Semester Plan</h2>
 
+            <MDBContainer id='y1' className='p-3 my-5 d-flex flex-column w-75' style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', boxShadow: '0 0.5rem 1rem regba(0, 0, 0, 0.15', whiteSpace: 'pre-wrap' }}>
+                <h3 className='mb-4 text-center' style={{ fontSize: '18px' }}>Year 1</h3>
+                <p id='y1Data'></p>
             </MDBContainer>
-            <h2 className='text-center' id='planTitle'></h2>
-            <div style={{ paddingLeft: '20%' ,  paddingRight: '20%', whiteSpace: 'pre-wrap'}}>
-                <p className='text-left' id='plan'></p>
-            </div>
+
+            <MDBContainer id='y2' className='p-3 my-5 d-flex flex-column w-75' style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', boxShadow: '0 0.5rem 1rem regba(0, 0, 0, 0.15', whiteSpace: 'pre-wrap' }}>
+                <h3 className='mb-4 text-center' style={{ fontSize: '18px' }}>Year 2</h3>
+                <p id='y2Data'></p>
+            </MDBContainer>
+
+            <MDBContainer id='y3' className='p-3 my-5 d-flex flex-column w-75' style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', boxShadow: '0 0.5rem 1rem regba(0, 0, 0, 0.15', whiteSpace: 'pre-wrap' }}>
+                <h3 className='mb-4 text-center' style={{ fontSize: '18px' }}>Year 3</h3>
+                <p id='y3Data'></p>
+            </MDBContainer>
+
+            <MDBContainer id='y4' className='p-3 my-5 d-flex flex-column w-75' style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', boxShadow: '0 0.5rem 1rem regba(0, 0, 0, 0.15', whiteSpace: 'pre-wrap' }}>
+                <h3 className='mb-4 text-center' style={{ fontSize: '18px' }}>Year 4</h3>
+                <p id='y4Data'></p>
+            </MDBContainer>
+
         </div>
     );
 }

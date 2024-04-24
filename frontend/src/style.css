@@ -35,3 +35,11 @@
         width: 65%;
     }
 }
+
+.custom-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 20px;
+}
