@@ -3,6 +3,7 @@ import './style.css';
 
 import {
     MDBContainer,
+    MDBBtn,
     MDBInput
 }
     from 'mdb-react-ui-kit';
