@@ -3,13 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import {
     MDBContainer,
-    MDBTabs,
-    MDBTabsItem,
-    MDBTabsLink,
-    MDBTabsContent,
-    MDBTabsPane,
-    MDBIcon,
-    MDBCheckbox,
     MDBBtn,
     MDBInput
 }
