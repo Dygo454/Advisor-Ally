@@ -1,9 +1,45 @@
+.custom-pill {
+    background-color: #e5e7eb;
+    color: #000000;
+}
+
+.custom-pill.active {
+    background-color: #e5e7eb;
+    color: #000000;
+}
+
+.ripple-wave.active {
+    display: none;
+}
+
+.bg-custom {
+    background-color: #e5e7eb;
+}
+
+.btn-custom {
+    background-color: #e5e7eb;
+}
+
+.form_container {
+    width: 30%;
+}
+
+@media screen and (max-width: 1000px) {
+    .form_container {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .form_container {
+        width: 65%;
+    }
+}
+
 .custom-button {
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     padding: 7px 20px;
-    
 }
-
