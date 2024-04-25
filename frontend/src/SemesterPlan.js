@@ -45,7 +45,7 @@ function SemesterPlan() {
     };
     useEffect(onLoad);
     return (
-        <div style={{ paddingTop: '4rem' }}>
+        <div>
             <MDBNavbar expand='sm' className='bg-body-tertiary'>
                 <MDBContainer>
                     <MDBNavbarBrand>Advisor Ally</MDBNavbarBrand>
