@@ -84,7 +84,7 @@ function Info() {
                 <MDBContainer className='p-3 my-5 d-flex flex-column w-50' style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', boxShadow: '0 0.5rem 1rem regba(0, 0, 0, 0.15' }}>
                     <div>
                         <label htmlFor='my-dropdown' style={{ marginRight: '10px' }}>Select a major</label>
-                        <select id='my-dropdown' value={ selectedValue }>
+                        <select id='my-dropdown'>
                             <option value='ARO_BSAE'>Aerospace Engineering</option>
                             <option value='BE_BSBE'>Biological Engineering</option>
                             <option value='CPE_BSCO'>Computer Engineering</option>
