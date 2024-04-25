@@ -135,7 +135,7 @@ def setCookie():
 @app.route("/whatif")
 def getWhatIf():
     s = requests.session()
-    s.cookies.set(shib,"_3501a0e1a0c01487413b2e90664f2814") # TODO: insert session ID
+    s.cookies.set(shib,"<INSERT SHIB HERE>") # TODO: insert session ID
     user = s.get("https://one.uf.edu/api/uf/user/")
     if "error" in user.json().keys():
         resp = Response('{"error":"Not signed in!"}',status=401)
